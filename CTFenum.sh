@@ -19,13 +19,13 @@ done
 #/root dizini altına aşağıdaki klasörleri oluştur.
 case $platform in
 
-	1)
+	1)	#eğer yoksa bu dizini OLUŞTUR!
 		kayit="/root/TryHackMe/lab"
 		;;
-	2)
+	2)	#eğer yoksa bu dizini OLUŞTUR!
 		kayit="/root/Vulnhub/lab"
 		;;
-	3)
+	3)	#eğer yoksa bu dizini OLUŞTUR!
 		kayit="/root/HackTheBox/lab"
 		;;
 esac
