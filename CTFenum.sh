@@ -66,21 +66,38 @@ else
 	echo -e "[---!---] ${g}Hedefin ilk 1000 Portunu tarıyorum, tarama sonucunu${s} ${k}$kayit/$makine/Top1000Port${s} ${g}dizinine kayıt edeceğim.${s}"
 	sleep 2
 	nmap -Pn -n -T4 --top-ports 1000 -oA $kayit/$makine/Top1000Port $ip -sV
+	#FTP protokolünü kontrol eder. eğer açıksa anonim giriş yapmayı dener.
+	grep " 21/open" $kayit/$makine/Top1000Port.gnmap > /dev/null 
+	if [ $? -eq 0 ]; then
+		echo -e "[---!---] ${g}21 Portu AÇIK. Anonymous login deniyorum!${s}"
+		FTP_Login=`ftp -inv $ip > $kayit/$makine/anonymousftplogin.txt <<EOT
+			user anonymous asd
+			bin
+			ls -la
+			bye
+EOT`
+	fi
+	grep "success" $kayit/$makine/anonymousftplogin.txt > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "[---!---] ${k}Anonymous FTP Login Tespit Edildi!!!!${s}"
+	else
+		echo -e "[---!---] ${g}Anonymous Login yok gibi duruyor, ama ben sadece masum bir scriptim. Sen yine de bir kontrol et.${s}"
+	fi
 	#80,443 ve 8080 portları açıksa dirsearch çalıştır
 	grep " 80/open" $kayit/$makine/Top1000Port.gnmap > /dev/null
 	if [ $? -eq 0 ]; then
-	echo -e "[---!---] ${g}80 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch.txt${s}"
-	dirsearch -u $ip -o $kayit/$makine/dirsearch.txt > /dev/null
+		echo -e "[---!---] ${g}80 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch.txt${s}"
+		dirsearch -u $ip -o $kayit/$makine/dirsearch.txt > /dev/null
 	fi
 	grep " 443/open" $kayit/$makine/Top1000Port.gnmap > /dev/null
 	if [ $? -eq 0 ]; then
-        echo -e "[---!---] ${g}443 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch443.txt${s}"
-        dirsearch -u $ip:443 -o $kayit/$makine/dirsearch443.txt > /dev/null
+        	echo -e "[---!---] ${g}443 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch443.txt${s}"
+	        dirsearch -u $ip:443 -o $kayit/$makine/dirsearch443.txt > /dev/null
 	fi
 	grep " 8080/open" $kayit/$makine/Top1000Port.gnmap > /dev/null
         if [ $? -eq 0 ]; then
-        echo -e "[---!---] ${g}8080 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch443.txt${s}"
-        dirsearch -u $ip:8080 -o $kayit/$makine/dirsearch8080.txt > /dev/null
+        	echo -e "[---!---] ${g}8080 portu açık. Dirsearch çalıştırıyorum.${s} ${k}->> $kayit/$makine/dirsearch443.txt${s}"
+	        dirsearch -u $ip:8080 -o $kayit/$makine/dirsearch8080.txt > /dev/null
 	fi
 	echo -e "[---!---] ${g}Ne olur ne olmaz, tüm portları taramak lazım!${s}"
 	sleep 2
