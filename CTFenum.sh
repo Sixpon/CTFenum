@@ -40,7 +40,7 @@ else
 	echo -e "[?] ${g}Makinenin adı ne? :${s}" 
 	read makine
 	#Makinenin adı ile bir dizin oluştur
-	mkdir $kayit/$makine
+	mkdir -p $kayit/$makine
 	sleep 1
 	echo -e "[---!---] ${k}$kayit/$makine${s} ${g}dizinine klasör oluşturdum.${s}"
 fi
